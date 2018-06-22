@@ -3,30 +3,21 @@
 #include "Game.hpp"
 #include "IR_Sensor.hpp"
 #include "Afst_Sensor.hpp"
-
+#include "catch.hpp"
+/// @file
+/// \brief
+/// Main codefile
+/// \details
+/// Deze file killed eerst de watchdog en roept daarna de functie voor de game aan die de rest van de library een functie geeft.
 int main(){
     WDT->WDT_MR = WDT_MR_WDDIS;
-    namespace target = hwlib::target;
-    IR_Sensor infra0 = create_IR_sensor();
-    uint32_t code = 0;
+    //servo op d9
+    //afstand sensor op trigger: d6 en echo: d7
+    //IR sensor op d2
+    //leds op d5
     runGame();
     
-    while(true){
-        if(!infra0.signal()){
-            code = infra0.output();
-            if(code != 10 && code!=0){
-                hwlib::wait_ms(100);
-                hwlib::cout<< code << hwlib::endl;
-            }
-        }
-    }
-    Afst_Sensor afstSensor0 = create_Afst_Sensor();
-    
-    
-    while(true){
-        int n = afstSensor0.getDist();
-        hwlib::cout << n << hwlib::endl;
-    }
+
 }
 
 
