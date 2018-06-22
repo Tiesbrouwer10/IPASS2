@@ -11,7 +11,7 @@ void Servo::turn_to_0(){
 }
 
 void Servo::turn_to_90(){
-    for(unsigned int i=0; i<5;i++){
+    for(unsigned int i=0; i<10;i++){
         hwlib::wait_ms(30);
         pin_place.set(1);
         hwlib::wait_ms(2.5);
