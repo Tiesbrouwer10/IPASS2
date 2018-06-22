@@ -23,38 +23,41 @@ bool IR_Sensor::signal(){
 }
 
 int IR_Sensor::knopIngedrukt(uint32_t code){
-    if(code == 17738455){
-        return 0;
+    while(true){
+        if(code == 16738455){
+            return 10;
+        }
+        if(code == 16724175){
+            return 1;
+        }
+        if(code == 16718055){
+            return 2;
+        }
+        if(code == 16743045){
+            return 3;
+        }
+        if(code == 16716015){
+            return 4;
+        }
+        if(code == 16726215){
+            return 5;
+        }
+        if(code == 16734885){
+            return 6;
+        }
+        if(code == 16728765){
+            return 7;
+        }
+        if(code == 16730805){
+            return 8;
+        }
+        if(code == 16732845){
+            return 9;
+        }
+        else{
+            return 0;
+        
     }
-    if(code == 16724175){
-        return 1;
-    }
-    if(code == 16718055){
-        return 2;
-    }
-    if(code == 16743045){
-        return 3;
-    }
-    if(code == 16716015){
-        return 4;
-    }
-    if(code == 16726215){
-        return 5;
-    }
-    if(code == 16734885){
-        return 6;
-    }
-    if(code == 16728765){
-        return 7;
-    }
-    if(code == 16730805){
-        return 8;
-    }
-    if(code == 16732845){
-        return 9;
-    }
-    else{
-        return 10;
     }
 }
 
@@ -98,12 +101,11 @@ int IR_Sensor::output(){
             }
         }
     }
-    hwlib::cout<<code<<hwlib::endl;
     return knopIngedrukt(code);
 }
 
 IR_Sensor create_IR_sensor(){
-    auto IR = hwlib::target::pin_in(hwlib::target::pins::a2);
+    auto IR = hwlib::target::pin_in(hwlib::target::pins::d2);
     IR_Sensor infra0(IR);
     return infra0;
 }
