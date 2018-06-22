@@ -8,7 +8,7 @@
 /// \brief
 /// Main codefile
 /// \details
-/// Deze file killed eerst de watchdog en roept daarna de functie voor de game aan die de rest van de library een functie geeft.
+/// first, this file killes the watchdog, after which it will run the main game file for this embedded program.
 int main(){
     WDT->WDT_MR = WDT_MR_WDDIS;
     //servo op d9
