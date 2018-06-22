@@ -1,12 +1,19 @@
 #include "Afst_Sensor.hpp"
 #include "hwlib.hpp"
+/// @file
 
-
+/// \brief
+/// Afstands sensor constructor
+/// \details
+/// Deze functie vormt van de output van alle functies een werkende beveiligins robot.
+/// De robot zal rond blijven kijken tot er een object binnen 500 meter te vinden is.
+/// Zodra dit gebeurt roept de functie de intruderFound() functie aan.
 Afst_Sensor::Afst_Sensor(hwlib::target::pin_out &trigger, hwlib::target::pin_in &echo):
     trigger(trigger),
     echo(echo)
 {}
 
+ 
 int Afst_Sensor::getDist(){
     long long nu;
     long long dan;
@@ -18,6 +25,9 @@ int Afst_Sensor::getDist(){
         hwlib::wait_us(10);
         trigger.set(0);
         hwlib::wait_ms(1);
+        while(!echo.get()){
+            hwlib::wait_us(2);
+        }
         if(echo.get()){
             nu = (hwlib::now_us());
             while(echo.get()){
@@ -29,26 +39,36 @@ int Afst_Sensor::getDist(){
     }
 }
 
-void Afst_Sensor::checkPerson(hwlib::target::pin_out &seenLed, IR_Sensor &infra0){
-    int distance;
-    uint32_t code;
-    distance = getDist();
-    if(distance <= 500){
+void Afst_Sensor::intruderFound(hwlib::target::pin_out &seenLed, IR_Sensor &infra0, int distance){
+    int code;
+    int secret;
+    hwlib::cout<< "Person seen"<< hwlib::endl;;
+    hwlib::wait_ms(20);
+    seenLed.set(1);
+    hwlib::wait_ms(2000);
+    seenLed.set(0);
+    secret = ((distance %10) + 1);
+    hwlib::cout<<secret<<hwlib::endl;
+    hwlib::wait_ms(2000);
+    for(int j = 0; j < secret ; j++){
         hwlib::wait_ms(20);
         seenLed.set(1);
-        hwlib::wait_ms(1000);
-        hwlib::cout<< "Person seen"<< hwlib::endl;
+        hwlib::wait_ms(500);
         seenLed.set(0);
-        while(infra0.signal()){
-            hwlib::wait_us(2);
-        }
-        code = infra0.output();
-        
-        hwlib::cout<<code<<hwlib::endl;
-            }
+        hwlib::wait_ms(500);
+        hwlib::cout<<"hoi" << j << hwlib::endl;
     }
+    hwlib::wait_ms(20);
+    code = 0;
+    code = infra0.output();
+    while(code != secret){
+        hwlib::wait_us(20);
+        code = infra0.output();
+    }   
+    hwlib::cout<<code<<hwlib::endl;
+    hwlib::wait_ms(200);
 
-
+}
 
 
 Afst_Sensor create_Afst_Sensor(){
